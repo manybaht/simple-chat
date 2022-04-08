@@ -1,0 +1,41 @@
+<style>
+div.chatbox {
+    white-space: pre;
+}
+</style>
+<input id="chat_message">
+<button onclick="sendmsg()">Send</button>
+<div id="chatbox" class="chatbox"></div>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+const chatbox = document.getElementById('chatbox');
+const history = [];
+
+const socket = io();
+
+socket.on("connect", () => {
+    console.log(socket.id);
+});
+
+socket.on("message", (data) => {
+    console.log(data);
+    newChat(data.message);
+});
+
+function sendmsg() {
+    const msgcontent = document.getElementById("chat_message").value;
+    newChat(msgcontent);
+    socket.emit("message", {
+        message: msgcontent,
+    });
+}
+
+function newChat(data) {
+    history.push(data);
+    let newChat = '';
+    for (let i = 0; i < history.length; i++) {
+        newChat += history[i] + '\n';
+    }
+    chatbox.textContent = newChat;
+}
+</script>
