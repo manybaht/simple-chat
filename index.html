@@ -31,7 +31,10 @@ function sendmsg() {
 }
 
 function newChat(data) {
-    history.push(data);
+    history.unshift(data);
+    if (history.length > 15) {
+        history.pop();
+    }
     let newChat = '';
     for (let i = 0; i < history.length; i++) {
         newChat += history[i] + '\n';
